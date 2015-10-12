@@ -1,0 +1,13 @@
+<VirtualHost *:<%= @params[:server_port] || node['apache']['listen_ports'].first %>>
+  <Proxy *>
+    Allow from localhost
+  </Proxy>
+ 
+  ProxyPass        /rstudio/ http://localhost:<%= @node.default['rstudio']['rserver']['port'].to_s %>/
+  ProxyPassReverse /rstudio/ http://localhost:<%= @node.default['rstudio']['rserver']['port'].to_s %>/
+  RedirectMatch permanent ^/rstudio$ /rstudio/
+
+  ErrorLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-error.log
+  CustomLog <%= node['apache']['log_dir'] %>/<%= @params[:name] %>-access.log combined
+
+</VirtualHost>

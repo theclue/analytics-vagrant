@@ -1,0 +1,6 @@
+{
+  "id"        : "johndoe",
+  "comment"   : "John Doe",
+  "groups"    : "rstudio",
+  "shell"     : "/bin/bash"
+}
