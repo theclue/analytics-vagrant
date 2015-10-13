@@ -59,5 +59,7 @@ override_attributes(
 
 run_list(
     "recipe[system]",
-    "recipe[analytics]"
+    "recipe[analytics]",
+    "recipe[analytics::mysql]",
+    "recipe[analytics::rstudio]"
 )
