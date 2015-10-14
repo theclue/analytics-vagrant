@@ -14,6 +14,22 @@ cpus = 4                              # Number of cores
 # --------------------------------------------------------------
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  
+  if Vagrant.has_plugin? 'vagrant-omnibus'
+    # Set Chef version for Omnibus
+    config.omnibus.chef_version = :latest
+  else
+    raise Vagrant::Errors::VagrantError.new,
+      "vagrant-omnibus missing, please install the plugin:\n" +
+      "vagrant plugin install vagrant-omnibus"
+  end
+  
+  unless Vagrant.has_plugin?("vagrant-ohai")
+  raise Vagrant::Errors::VagrantError.new,
+      "vagrant-ohai missing, please install the plugin:\n" +
+      "vagrant plugin install vagrant-ohai "
+  end
+  
   config.vm.box = "ubuntu/trusty64"
   config.vm.define "analytics" do |master|
     #master.vm.network "private_network", type: "dhcp"
