@@ -42,6 +42,7 @@ rstudio_url_prefix = value_for_platform(
     }
   )
 
+  Chef::Log.info('Retrieving RStudio Server file.')
 remote_file "#{Chef::Config[:file_cache_path]}/#{rstudio_remote}" do
   source "#{rstudio_url_prefix}/#{rstudio_remote}"
   mode 0644
@@ -49,23 +50,22 @@ end
 
 case node['platform']
 when 'ubuntu', 'debian'
-  dpkg_package "rstudio" do
+  package "rstudio-server" do
+    provider Chef::Provider::Package::Gdebi
     source "#{Chef::Config[:file_cache_path]}/#{rstudio_remote}"
     action :install
   end
 when 'centos', 'redhat', 'amazon', 'scientific'
-  yum_package 'rstudio' do
+  yum_package 'rstudio-server' do
     source "#{Chef::Config[:file_cache_path]}/#{rstudio_remote}"
     action :install
   end
 end
 
-# TODO register rstudio as a service to get the automatic restart working
-# (this doesn't seem to work, actually)
 service "rstudio-server" do
     provider Chef::Provider::Service::Upstart
     supports :start => true, :stop => true, :restart => true
-    action :start
+    action :restart
  end
  
  # force a path for R_HOME because of a bug in 3.2.2 when using rstudio server 0.99+
@@ -84,7 +84,7 @@ if node['rro']['version'] == "3.2.2"
 end
 
 template "/etc/rstudio/rserver.conf" do
-    source "rserver.conf.erb"
+    source "rstudio/rserver.conf.erb"
     mode 0644
     owner "root"
     group "root"
@@ -99,7 +99,7 @@ template "/etc/rstudio/rserver.conf" do
 end
 
 template "/etc/rstudio/rsession.conf" do
-    source "rsession.conf.erb"
+    source "rstudio/rsession.conf.erb"
     mode 0644
     owner "root"
     group "root"
@@ -116,7 +116,7 @@ web_app "rstudio" do
   template 'rstudio.web.conf.erb'
 end
 
-# allow rstudio to use apache proxy
+# allow rstudio server to use apache proxy
 template '/etc/apache2/mods-enabled/proxy.conf' do
   source 'proxy.conf.erb'
   owner 'root'
@@ -126,11 +126,10 @@ template '/etc/apache2/mods-enabled/proxy.conf' do
 end
 
 # create the default user
-user "rstudio" do
+user_account "rstudio" do
   supports :manage_home => true
   comment "Application execution user"
   uid 2000
-  group [ "users", "rstudio" ]
   shell "/bin/false"
 end
 

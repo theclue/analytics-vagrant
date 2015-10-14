@@ -1,0 +1,11 @@
+Berksfile.lock
+Gemfile.lock
+*.swp
+*.bak
+*.vagrant
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~

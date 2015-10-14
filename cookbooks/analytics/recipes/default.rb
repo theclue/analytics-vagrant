@@ -7,6 +7,7 @@
 # - install PHP
 # - install gcc
 # - install and update Revolution R Open
+# - add users
 #
 
 ### requirements ###
@@ -24,9 +25,10 @@ include_recipe "php::module_apc"
 include_recipe "php::module_curl"
 include_recipe "apache2::mod_php5"
 include_recipe "ark"
+include_recipe "user::data_bag"
 
 # Install some useful packages
-%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git git-core wget libgfortran3 libtcl8.6 libtk8.6 gdebi-core apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev }.each do |a_package|
+%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev }.each do |a_package|
   package a_package
 end
 
@@ -55,6 +57,7 @@ rro_remote = value_for_platform(
     }
   )
 
+Chef::Log.info('Retrieving Revolution R Open file.')
 remote_file "#{Chef::Config[:file_cache_path]}/#{rro_remote}" do
   source "https://mran.revolutionanalytics.com/install/#{rro_remote}"
   mode 0644
@@ -83,6 +86,7 @@ ark 'download_revomath' do
 end
 
 # install some mandatory packages and updates
+Chef::Log.info('Install and update R System Packages. It may take time, so be patient.')
 bash 'init_rro' do
     code <<-EOH
     R -e "update.packages(checkBuilt = TRUE, ask = FALSE)"

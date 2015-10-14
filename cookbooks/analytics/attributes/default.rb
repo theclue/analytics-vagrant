@@ -26,3 +26,6 @@ node.default['mysql']['data_dir'] = '/var/lib/mysql'
 node.default['mysql']['socket'] = '/var/run/mysqld/mysqld.sock'
 node.default['mysql']['initial_root_password'] = 'youreallyshouldchangeme'
 
+# User
+node.default['user']['default_shell'] = "/bin/false"
+

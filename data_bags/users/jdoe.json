@@ -1,0 +1,6 @@
+{
+  "id"        : "jdoe",
+  "comment"   : "John Doe",
+  "home"      : "/home/jdoe",
+  "groups"    : ["users", "rstudio"],
+}
