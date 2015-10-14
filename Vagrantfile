@@ -6,8 +6,8 @@ VAGRANTFILE_API_VERSION = "2"
 
 # Configuration parameters
 ram = 4096                            # Ram in MB 
-hostname = "openanalytics"                # The hostname for the box
-machine.name = "Open Analytics Stack" # The machine name (for VirtualBox only)
+hostname = "analytics"                # The hostname for the box
+machineName = "Open Analytics Stack"  # The machine name (for VirtualBox only)
 
 # Do not edit below this line
 # --------------------------------------------------------------
@@ -15,15 +15,15 @@ machine.name = "Open Analytics Stack" # The machine name (for VirtualBox only)
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.define "analytics" do |master|
-    master.vm.network "private_network", type: "dhcp"
+    #master.vm.network "private_network", type: "dhcp"
+    master.vm.network "forwarded_port", guest: 80, host: 8080
     master.vm.hostname = hostname
-    master.vm.synced_folder "rstudio/", "/home/rstudio"
 
     master.vm.provider "vmware_fusion" do |v|
       v.vmx["memsize"]  = ram.to_s
     end
     master.vm.provider :virtualbox do |v|
-      v.name = machine.name
+      v.name = machineName
       v.customize ["modifyvm", :id, "--memory", ram.to_s]
     end
     
@@ -34,6 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision :chef_solo do |chef|
       chef.cookbooks_path = "cookbooks"
       chef.roles_path = "roles"
+      chef.data_bags_path = "data_bags"
       chef.add_role "analytics"
     end
   end
