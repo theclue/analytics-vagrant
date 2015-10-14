@@ -12,6 +12,7 @@ node.default['apache']['default_site_enabled'] = false
 node.default['apache']['prefork']['startservers'] = 2
 node.default['apache']['prefork']['serverlimit'] = 4
 node.default['apache']['prefork']['maxclients'] = 6
+node.default['apache']['mpm']  = 'prefork' # cfr. https://github.com/svanzoest-cookbooks/apache2/issues/187
 
 # Ark
 node.default['ark']['prefix_home'] = '/home/vagrant'
