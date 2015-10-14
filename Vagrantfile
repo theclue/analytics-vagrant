@@ -8,6 +8,7 @@ VAGRANTFILE_API_VERSION = "2"
 ram = 4096                            # Ram in MB 
 hostname = "analytics"                # The hostname for the box
 machineName = "Open Analytics Stack"  # The machine name (for VirtualBox only)
+cpus = 4                              # Number of cores
 
 # Do not edit below this line
 # --------------------------------------------------------------
@@ -25,6 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provider :virtualbox do |v|
       v.name = machineName
       v.customize ["modifyvm", :id, "--memory", ram.to_s]
+      v.customize ["modifyvm", :id, "--cpus", cpus.to_s]
     end
     
     # Disable tty for sudoers
