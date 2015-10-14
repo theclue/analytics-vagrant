@@ -28,7 +28,7 @@ include_recipe "ark"
 include_recipe "user::data_bag"
 
 # Install some useful packages
-%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev }.each do |a_package|
+%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev libshadow-ruby}.each do |a_package|
   package a_package
 end
 
