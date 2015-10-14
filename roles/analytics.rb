@@ -1,6 +1,7 @@
 name "analytics"
 
 override_attributes(
+    "users" => ["jdoe"],
     "rro" => {
       "version" => "3.2.2"
     },

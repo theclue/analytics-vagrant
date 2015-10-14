@@ -1,5 +1,8 @@
 {
-    "name": "staging",
-    "user": "staging",
-    "password": "staging"
+    "id": "staging",
+    "users" => {
+      "staging" => {
+        "password" => "staging"
+      }
+    }  
 }

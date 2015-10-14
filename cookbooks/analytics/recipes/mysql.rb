@@ -60,7 +60,7 @@ databases.each do |name|
   database = data_bag_item("databases", name)
 
   # databases
-  mysql_database database['name'] do
+  mysql_database database['id'] do
     connection(
       :host     => '127.0.0.1',
       :username => 'root',
@@ -71,17 +71,19 @@ databases.each do |name|
   end
   
   # users
-  mysql_database_user database['user'] do
-    connection(
-      :host     => '127.0.0.1',
-      :username => 'root',
-      :socket   => node['mysql']['socket'],
-      :password => node['mysql']['initial_root_password']
-      )
-    password database['password']
-    database_name database['name']
-    privileges [:all]
-    action :grant
+  database["users"].each do |user, properties|
+    mysql_database_user user do
+      connection(
+        :host     => '127.0.0.1',
+        :username => 'root',
+        :socket   => node['mysql']['socket'],
+        :password => node['mysql']['initial_root_password']
+        )
+      password properties['password']
+      database_name database['id']
+      privileges [:all]
+      action :grant
+    end
   end
 end
 
