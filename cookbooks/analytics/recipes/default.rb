@@ -28,7 +28,7 @@ include_recipe "ark"
 include_recipe "user::data_bag"
 
 # Install some useful packages
-%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev ruby-shadow}.each do |a_package|
+%w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev ruby-shadow r-base-dev}.each do |a_package|
   package a_package
 end
 
@@ -74,6 +74,7 @@ when 'centos', 'redhat', 'amazon', 'scientific'
     action :install
   end
 end
+package "r-base-dev"
 
 revomath_remote = "RevoMath-#{node['rro']['version']}.tar.gz"
 ark 'download_revomath' do
@@ -84,10 +85,10 @@ ark 'download_revomath' do
    action :put
 end
 
-# install some mandatory packages and updates
+# install some system packages and updates
 bash 'init_rro_system_packages' do
     code <<-EOH
     R -e "update.packages(checkBuilt = TRUE, ask = FALSE)"
-    R -e "install.packages(c('testthat', 'roxygen2', 'devtools'), dependencies = TRUE)"
+    R -e "install.packages(c('testthat', 'roxygen2', 'devtools', 'packrat'), dependencies = TRUE)"
     EOH
 end
