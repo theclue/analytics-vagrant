@@ -1,8 +1,0 @@
-{
-    "id": "deploy",
-    "users" => {
-      "deploy" => {
-        "password" => "deploy"
-      }
-    }  
-}

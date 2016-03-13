@@ -47,46 +47,6 @@ mysql_config 'analytics-optimizations' do
   action :create
 end
 
-# Initialize databases data bag
-databases = []
-begin
-  databases = data_bag("databases")
-rescue
-  puts "Unable to load databases data bag."
-end
-
-# configure initial databases
-databases.each do |name|
-  database = data_bag_item("databases", name)
-
-  # databases
-  mysql_database database['id'] do
-    connection(
-      :host     => '127.0.0.1',
-      :username => 'root',
-      :socket   => node['mysql']['socket'],
-      :password => node['mysql']['initial_root_password']
-    )
-    action :create
-  end
-  
-  # users
-  database["users"].each do |user, properties|
-    mysql_database_user user do
-      connection(
-        :host     => '127.0.0.1',
-        :username => 'root',
-        :socket   => node['mysql']['socket'],
-        :password => node['mysql']['initial_root_password']
-        )
-      password properties['password']
-      database_name database['id']
-      privileges [:all]
-      action :grant
-    end
-  end
-end
-
 # install phpmyadmin
 template '/tmp/phpmyadmin.deb.conf' do
   source 'phpmyadmin.deb.conf.erb'
@@ -101,3 +61,10 @@ bash "debconf_for_phpmyadmin" do
   code "debconf-set-selections /tmp/phpmyadmin.deb.conf"
 end
 package "phpmyadmin"
+
+# install DBI/RMySQL implementations
+bash 'init_rro_system_packages' do
+    code <<-EOH
+    R -e "install.packages(c('DBI', 'RMySQL'), dependencies = TRUE)"
+    EOH
+end

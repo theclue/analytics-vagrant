@@ -6,9 +6,6 @@ override_attributes(
     },
     "rstudio" => {
       "version" => "0.99.892",
-      "rserver" => {
-        "group" => "rstudio"
-      },
     "rsession" => {
       "session-timeout" => 30
       }
