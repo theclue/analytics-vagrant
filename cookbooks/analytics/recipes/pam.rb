@@ -8,8 +8,8 @@
 #
 include_recipe "analytics::rstudio"
 
-package "libpam-pwdfile" do
-    action :install
+%w{libpam-dev libpam-pwdfile db-util}.each do |a_package|
+  package a_package
 end
 
   # The search is performed using chef-solo-search
