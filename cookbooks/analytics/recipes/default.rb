@@ -25,7 +25,6 @@ include_recipe "php::module_apc"
 include_recipe "php::module_curl"
 include_recipe "apache2::mod_php5"
 include_recipe "ark"
-include_recipe "user::data_bag"
 
 # Install some useful packages
 %w{ vim screen tmux mc subversion curl make g++ libsqlite3-dev graphviz libxml2-utils links git wget libgfortran3 libtcl8.6 libtk8.6 gdebi apt-file texlive-binaries libgdal1-dev gdal-bin libgdal-doc expat libxml2-dev gfortran libcurl4-openssl-dev ruby-shadow r-base-dev}.each do |a_package|
@@ -50,15 +49,15 @@ end
 #--------------------------------------
 rro_remote = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "RRO-#{node['rro']['version']}-Ubuntu-#{node['platform_version'].to_i}.4.x86_64.deb"
+      'default' => "MRO-#{node['rro']['version']}-Ubuntu-#{node['platform_version'].to_i}.4.x86_64.deb"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => "RRO-#{node['rro']['version']}.el#{node['platform_version'].to_i}.x86_64.rpm"
+      'default' => "MRO-#{node['rro']['version']}.el#{node['platform_version'].to_i}.x86_64.rpm"
     }
   )
 
 remote_file "#{Chef::Config[:file_cache_path]}/#{rro_remote}" do
-  source "https://mran.revolutionanalytics.com/install/#{rro_remote}"
+  source "https://mran.revolutionanalytics.com/install/mro/#{node['rro']['version']}/#{rro_remote}"
   mode 0644
 end
 
@@ -78,14 +77,14 @@ package "r-base-dev"
 
 revomath_remote = "RevoMath-#{node['rro']['version']}.tar.gz"
 ark 'download_revomath' do
-   url "https://mran.revolutionanalytics.com/install/#{revomath_remote}"
+   url "https://mran.revolutionanalytics.com/install/mro/#{node['rro']['version']}/#{revomath_remote}"
    version node['rro']['version']
    path "#{Chef::Config[:file_cache_path]}/RevoMath-#{node['rro']['version']}"
    owner 'root'
    action :put
 end
 
-# install some system packages and updates
+# install some system packages useful for development and perform a general update
 bash 'init_rro_system_packages' do
     code <<-EOH
     R -e "update.packages(checkBuilt = TRUE, ask = FALSE)"

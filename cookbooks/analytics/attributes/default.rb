@@ -1,5 +1,5 @@
 # Revolution R
-node.default['rro']['version'] = '3.2.2'
+node.default['rro']['version'] = '3.2.3'
 
 # RStudio Server
 node.default['rstudio']['version'] = '0.99'
@@ -30,3 +30,5 @@ node.default['mysql']['initial_root_password'] = 'youreallyshouldchangeme'
 # User
 node.default['user']['default_shell'] = "/bin/false"
 
+# Apt
+node.default['apt']['compile_time_update'] = true

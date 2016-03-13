@@ -26,10 +26,10 @@ end
 #-----------------------------------
 rstudio_remote = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "rstudio-server-#{node['rstudio']['version']}.486-amd64.deb"
+      'default' => "rstudio-server-#{node['rstudio']['version']}-amd64.deb"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}.486-x86_64.rpm"
+      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}-x86_64.rpm"
     }
   )
   
@@ -68,10 +68,10 @@ service "rstudio-server" do
     action :restart
  end
  
- # force a path for R_HOME because of a bug in 3.2.2 when using rstudio server 0.99+
+# force a path for R_HOME because of a bug in 3.2.2 when using rstudio server 0.99+
 # cfr: https://github.com/RevolutionAnalytics/RRO/issues/241
-if node['rro']['version'] == "3.2.2"
-  template "/usr/lib64/RRO-#{node['rro']['version']}/R-#{node['rro']['version']}/lib/R/bin/R" do
+if node['rro']['version'] == "3.2.3"
+  template "/usr/lib64/MRO-#{node['rro']['version']}/R-#{node['rro']['version']}/lib/R/bin/R" do
     source "R.erb"
     mode 0755
     owner "root"
@@ -123,17 +123,4 @@ template '/etc/apache2/mods-enabled/proxy.conf' do
   group 'root'
   mode 0777
   notifies :restart, "service[apache2]"
-end
-
-# create the default user
-user_account "rstudio" do
-  supports :manage_home => true
-  comment "Application execution user"
-  uid 2000
-  shell "/bin/false"
-end
-
-group 'rstudio' do
-  members 'rstudio'
-  append true
 end

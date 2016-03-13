@@ -1,12 +1,11 @@
 name "analytics"
 
 override_attributes(
-    "users" => ["jdoe"],
     "rro" => {
-      "version" => "3.2.2"
+      "version" => "3.2.3"
     },
     "rstudio" => {
-      "version" => "0.99",
+      "version" => "0.99.892",
       "rserver" => {
         "group" => "rstudio"
       },
@@ -62,5 +61,6 @@ run_list(
     "recipe[system]",
     "recipe[analytics::default]",
     "recipe[analytics::mysql]",
-    "recipe[analytics::rstudio]"
+    "recipe[analytics::rstudio]",
+    "recipe[analytics::pam]"
 )

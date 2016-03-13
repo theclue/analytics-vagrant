@@ -1,6 +1,10 @@
 {
-  "id"        : "jdoe",
-  "comment"   : "John Doe",
-  "home"      : "/home/jdoe",
-  "groups"    : ["users", "rstudio"]
+  "id": "jdoe",
+  "groups": [ "rstudio" ],
+  "uid": 9001,
+  "shell": "\/bin\/false",
+  "comment": "Test User",
+  "rstudio": {
+    "passwd": "jdoe"
+  }
 }

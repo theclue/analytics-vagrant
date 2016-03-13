@@ -6,15 +6,14 @@
 #
 # from: https://github.com/sprintly/rstudio-chef/blob/master/recipes/pam.rb
 #
-include_recipe 'rstudio::server'
+include_recipe "analytics::rstudio"
 
 package "libpam-pwdfile" do
     action :install
 end
 
-if Chef::Config[:solo]
-  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
-else
+  # The search is performed using chef-solo-search
+  # Migrating to Chef-ZERO will be considered sooner or later...
   users = search(:users, 'groups:rstudio')
 
   template "/etc/rstudio/passwd" do
@@ -29,9 +28,8 @@ else
   end
 
   cookbook_file "/etc/pam.d/rstudio" do
-    source "pam/rstudio"
+    source "pam/etc/pam.d/rstudio"
     owner "root"
     group "root"
     mode 0644
   end
-end
