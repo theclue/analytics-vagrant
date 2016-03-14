@@ -26,10 +26,10 @@ end
 #-----------------------------------
 rstudio_remote = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "rstudio-server-#{node['rstudio']['version']}-amd64.deb"
+      'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'}.deb"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}-x86_64.rpm"
+      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'amd64' : 'i386'}.rpm"
     }
   )
   
@@ -42,9 +42,11 @@ rstudio_url_prefix = value_for_platform(
     }
   )
 
-  Chef::Log.info('Retrieving RStudio Server file.')
+Chef::Log.info('Retrieving RStudio Server file.')
 remote_file "#{Chef::Config[:file_cache_path]}/#{rstudio_remote}" do
   source "#{rstudio_url_prefix}/#{rstudio_remote}"
+  action :create_if_missing
+  not_if { ::File.exists?('/etc/init/shiny-server.conf') }      
   mode 0644
 end
 
@@ -68,9 +70,9 @@ service "rstudio-server" do
     action :restart
  end
  
-# force a path for R_HOME because of a bug in 3.2.2 when using rstudio server 0.99+
+# force a path for R_HOME because of a bug in 3.2.3 when using rstudio server 0.99+
 # cfr: https://github.com/RevolutionAnalytics/RRO/issues/241
-if node['rro']['version'] == "3.2.3"
+if node['rro']['version'] >= "3.2.2"
   template "/usr/lib64/MRO-#{node['rro']['version']}/R-#{node['rro']['version']}/lib/R/bin/R" do
     source "R.erb"
     mode 0755

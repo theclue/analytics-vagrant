@@ -4,6 +4,8 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+Vagrant.require_version '>= 1.5.0'
+
 # Configuration parameters
 ram = 4096                            # Ram in MB 
 hostname = "analytics"                # The hostname for the box
@@ -29,6 +31,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "vagrant-ohai missing, please install the plugin:\n" +
       "vagrant plugin install vagrant-ohai "
   end
+  
+  # Enabling the Berkshelf plugin.
+  config.berkshelf.enabled = true
   
   config.vm.box = "ubuntu/trusty64"
   config.vm.define "analytics" do |master|

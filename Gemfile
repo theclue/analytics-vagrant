@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
-gem "berkshelf", github: "berkshelf/berkshelf"
-gem 'vagrant-berkshelf', github: "berkshelf/vagrant-berkshelf"
-gem 'vagrant-omnibus', github: "schisamo/vagrant-omnibus"
-gem 'foodcritic', '~> 3.0'
-gem 'chef-zero', '~> 1.7'
+gem 'vagrant-ohai', '~> 0.1.13'
+gem 'berkshelf', '~> 4.3'
+gem 'vagrant-berkshelf', '~> 4.1'
+gem 'vagrant-omnibus', '~> 1.4', '>= 1.4.1'
+gem 'foodcritic', '~> 6.0', '>= 6.0.1'
+gem 'chef-zero', '~> 4.5'
