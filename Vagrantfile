@@ -29,7 +29,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   unless Vagrant.has_plugin?("vagrant-ohai")
   raise Vagrant::Errors::VagrantError.new,
       "vagrant-ohai missing, please install the plugin:\n" +
-      "vagrant plugin install vagrant-ohai "
+      "vagrant plugin install vagrant-ohai"
+  end
+  
+  unless Vagrant.has_plugin?("vagrant-berkshelf")
+  raise Vagrant::Errors::VagrantError.new,
+      "vagrant-berkshelf missing, please install the plugin:\n" +
+      "vagrant plugin install vagrant-berkshelf"
+  end
+  
+  unless Vagrant.has_plugin?("vagrant-vbguest")
+  raise Vagrant::Errors::VagrantError.new,
+      "vagrant-vbguest missing, please install the plugin:\n" +
+      "vagrant plugin install vagrant-vbguest"
   end
   
   # Enabling the Berkshelf plugin.
