@@ -1,0 +1,8 @@
+[
+  "vagrant-omnibus",
+  "vagrant-ohai",
+  "vagrant-vbguest",
+  {
+    "vagrant-berkshelf": "5.1.0"
+  }
+]
