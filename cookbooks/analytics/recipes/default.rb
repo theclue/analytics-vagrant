@@ -75,13 +75,15 @@ when 'centos', 'redhat', 'amazon', 'scientific'
 end
 package "r-base-dev"
 
-revomath_remote = "RevoMath-#{node['rro']['version']}.tar.gz"
-ark 'download_revomath' do
+if node['rro']['version'] < "3.3.1"
+  revomath_remote = "RevoMath-#{node['rro']['version']}.tar.gz"
+  ark 'download_revomath' do
    url "https://mran.revolutionanalytics.com/install/mro/#{node['rro']['version']}/#{revomath_remote}"
    version node['rro']['version']
    path "#{Chef::Config[:file_cache_path]}/RevoMath-#{node['rro']['version']}"
    owner 'root'
    action :put
+  end
 end
 
 # install some system packages useful for development and perform a general update

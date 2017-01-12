@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   unless Vagrant.has_plugin?("vagrant-berkshelf")
   raise Vagrant::Errors::VagrantError.new,
       "vagrant-berkshelf missing, please install the plugin:\n" +
-      "vagrant plugin install vagrant-berkshelf"
+      "vagrant plugin install vagrant-berkshelf --plugin-version 5.1.0"
   end
   
   unless Vagrant.has_plugin?("vagrant-vbguest")

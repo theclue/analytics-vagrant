@@ -2,10 +2,10 @@ name "analytics"
 
 override_attributes(
     "rro" => {
-      "version" => "3.2.3"
+      "version" => "3.3.2"
     },
     "rstudio" => {
-      "version" => "0.99.892",
+      "version" => "1.0.136",
     "rsession" => {
       "session-timeout" => 30
       }

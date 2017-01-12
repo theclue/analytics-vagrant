@@ -17,28 +17,23 @@ include_recipe "apache2::mod_proxy_http"
   package a_package
 end
 
-mysql2_chef_gem 'default' do
-  action :install
-end
-
-
 ###### install rstudio server ######
 #-----------------------------------
 rstudio_remote = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'}.deb"
+      'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'amd64' : 'i386'}.deb"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'amd64' : 'i386'}.rpm"
+      'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'}.rpm"
     }
   )
   
 rstudio_url_prefix = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "https://download2.rstudio.org"
+      'default' => "https://download1.rstudio.org"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => (if node['platform_version'].to_i >= 6 then "https://download2.rstudio.org/" else "https://s3.amazonaws.com/rstudio-server" end)
+      'default' => (if node['platform_version'].to_i >= 6 then "https://download1.rstudio.org/" else "https://s3.amazonaws.com/rstudio-server" end)
     }
   )
 
@@ -72,7 +67,7 @@ service "rstudio-server" do
  
 # force a path for R_HOME because of a bug in 3.2.3 when using rstudio server 0.99+
 # cfr: https://github.com/RevolutionAnalytics/RRO/issues/241
-if node['rro']['version'] >= "3.2.2"
+if node['rro']['version'] >= "3.2.2" && node['rro']['version'] < "3.3.1"
   template "/usr/lib64/MRO-#{node['rro']['version']}/R-#{node['rro']['version']}/lib/R/bin/R" do
     source "R.erb"
     mode 0755
