@@ -1,14 +1,15 @@
 name "analytics"
 
 override_attributes(
-    "rro" => {
-      "version" => "3.3.2"
-    },
     "rstudio" => {
       "version" => "1.0.136",
     "rsession" => {
       "session-timeout" => 30
       }
+    },
+    "r" => {
+      "version" => nil,
+      "cran_mirror" => "cran.stat.unipd.it"
     },
     "apache" => {
       "prefork" => {
@@ -55,7 +56,7 @@ override_attributes(
 )
 
 run_list(
-    "recipe[system]",
+    "recipe[system::default]",
     "recipe[analytics::default]",
     "recipe[analytics::mysql]",
     "recipe[analytics::rstudio]",

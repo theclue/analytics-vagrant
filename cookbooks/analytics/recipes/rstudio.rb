@@ -64,21 +64,6 @@ service "rstudio-server" do
     supports :start => true, :stop => true, :restart => true
     action :restart
  end
- 
-# force a path for R_HOME because of a bug in 3.2.3 when using rstudio server 0.99+
-# cfr: https://github.com/RevolutionAnalytics/RRO/issues/241
-if node['rro']['version'] >= "3.2.2" && node['rro']['version'] < "3.3.1"
-  template "/usr/lib64/MRO-#{node['rro']['version']}/R-#{node['rro']['version']}/lib/R/bin/R" do
-    source "R.erb"
-    mode 0755
-    owner "root"
-    group "root"
-    notifies :restart, "service[rstudio-server]"
-    variables :version => {
-      'full' => node['rro']['version']
-    }
-  end
-end
 
 template "/etc/rstudio/rserver.conf" do
     source "rstudio/rserver.conf.erb"

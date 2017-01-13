@@ -4,7 +4,6 @@
 #
 # - install mySql Server
 # - configure an instance
-# - create the databases enlisted in data_bags/databases
 # - install phpmyadmin
 #
 
