@@ -24,19 +24,18 @@ rstudio_remote = value_for_platform(
       'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'amd64' : 'i386'}.deb"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => "rstudio-server-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'}.rpm"
+      'default' => "rstudio-server-rhel#{(if node['platform_version'].to_i >= 6 then "" else "5" end)}-#{node['rstudio']['version']}-#{node['kernel']['machine'] =~ /x86_64/ ? 'x86_64' : 'i686'}.rpm"
     }
   )
   
 rstudio_url_prefix = value_for_platform(
     %w|ubuntu debian| => {
-      'default' => "https://download1.rstudio.org"
+      'default' => "https://download2.rstudio.org"
     },
     %w|centos redhat amazon scientific| => {
-      'default' => (if node['platform_version'].to_i >= 6 then "https://download1.rstudio.org/" else "https://s3.amazonaws.com/rstudio-server" end)
+      'default' => (if node['platform_version'].to_i >= 6 then "https://download2.rstudio.org/" else "https://s3.amazonaws.com/rstudio-server" end)
     }
   )
-
 Chef::Log.info('Retrieving RStudio Server file.')
 remote_file "#{Chef::Config[:file_cache_path]}/#{rstudio_remote}" do
   source "#{rstudio_url_prefix}/#{rstudio_remote}"
