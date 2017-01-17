@@ -8,7 +8,8 @@ override_attributes(
       }
     },
     "r" => {
-      "version" => nil
+      "version" => nil,
+      "cran_mirror" => "https://cran.stat.unipd.it/"
     },
     "apache" => {
       "prefork" => {
